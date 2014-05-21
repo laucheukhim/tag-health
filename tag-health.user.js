@@ -35,6 +35,7 @@ with_jquery(function ($) {
     var maxItems = 500;
     var maxPage = 5;
     var cacheDuration = 3600;
+    var scriptURL = '//laucheukhim.github.io/tag-health/tag-health.user.js';
 
     $.fn.getStyleObject = function () {
         var dom = this.get(0);
@@ -295,44 +296,44 @@ with_jquery(function ($) {
         }, settings);
         settings.startDate = (function () {
             switch (settings.startDate) {
-            case '1 hour':
-                return parseInt(Date.now() / 1000 - 1 * 1 * 3600, 10);
-            case '6 hours':
-                return parseInt(Date.now() / 1000 - 1 * 6 * 3600, 10);
-            case '12 hours':
-                return parseInt(Date.now() / 1000 - 1 * 12 * 3600, 10);
-            case '1 day':
-                return parseInt(Date.now() / 1000 - 1 * 24 * 3600, 10);
-            case '1 week':
-                return parseInt(Date.now() / 1000 - 7 * 24 * 3600, 10);
-            case '1 month':
-                return parseInt(Date.now() / 1000 - 30 * 24 * 3600, 10);
-            case '6 months':
-                return parseInt(Date.now() / 1000 - 182.5 * 24 * 3600, 10);
-            case '1 year':
-                return parseInt(Date.now() / 1000 - 365 * 24 * 3600, 10);
-            default:
-                return null;
+                case '1 hour':
+                    return parseInt(Date.now() / 1000 - 1 * 1 * 3600, 10);
+                case '6 hours':
+                    return parseInt(Date.now() / 1000 - 1 * 6 * 3600, 10);
+                case '12 hours':
+                    return parseInt(Date.now() / 1000 - 1 * 12 * 3600, 10);
+                case '1 day':
+                    return parseInt(Date.now() / 1000 - 1 * 24 * 3600, 10);
+                case '1 week':
+                    return parseInt(Date.now() / 1000 - 7 * 24 * 3600, 10);
+                case '1 month':
+                    return parseInt(Date.now() / 1000 - 30 * 24 * 3600, 10);
+                case '6 months':
+                    return parseInt(Date.now() / 1000 - 182.5 * 24 * 3600, 10);
+                case '1 year':
+                    return parseInt(Date.now() / 1000 - 365 * 24 * 3600, 10);
+                default:
+                    return null;
             }
         })();
         settings.isAnswered = (function () {
             switch (settings.isAnswered) {
-            case 'Answered':
-                return true;
-            case 'Unanswered':
-                return false;
-            default:
-                return null;
+                case 'Answered':
+                    return true;
+                case 'Unanswered':
+                    return false;
+                default:
+                    return null;
             }
         })();
         settings.isClosed = (function () {
             switch ($('#tag-health .closed-button').html()) {
-            case 'Closed':
-                return true;
-            case 'Not closed':
-                return false;
-            default:
-                return null;
+                case 'Closed':
+                    return true;
+                case 'Not closed':
+                    return false;
+                default:
+                    return null;
             }
         })();
         var widthRatio = $('#tag-health-plot .cell.left').outerWidth() / $('#tag-health-plot').width();
@@ -772,59 +773,59 @@ with_jquery(function ($) {
         }
         if ($(this).is('#tag-health .time-button')) {
             switch ($(this).html()) {
-            case '1 hour':
-                $(this).html('6 hours');
-                break;
-            case '6 hours':
-                $(this).html('12 hours');
-                break;
-            case '12 hours':
-                $(this).html('1 day');
-                break;
-            case '1 day':
-                $(this).html('1 week');
-                break;
-            case '1 week':
-                $(this).html('1 month');
-                break;
-            case '1 month':
-                $(this).html('6 months');
-                break;
-            case '6 months':
-                $(this).html('1 year');
-                break;
-            case '1 year':
-                $(this).html('Any');
-                break;
-            default:
-                $(this).html('1 hour');
-                break;
+                case '1 hour':
+                    $(this).html('6 hours');
+                    break;
+                case '6 hours':
+                    $(this).html('12 hours');
+                    break;
+                case '12 hours':
+                    $(this).html('1 day');
+                    break;
+                case '1 day':
+                    $(this).html('1 week');
+                    break;
+                case '1 week':
+                    $(this).html('1 month');
+                    break;
+                case '1 month':
+                    $(this).html('6 months');
+                    break;
+                case '6 months':
+                    $(this).html('1 year');
+                    break;
+                case '1 year':
+                    $(this).html('Any');
+                    break;
+                default:
+                    $(this).html('1 hour');
+                    break;
             }
         }
         if ($(this).is('#tag-health .answered-button')) {
             switch ($(this).html()) {
-            case 'Answered':
-                $(this).html('Unanswered');
-                break;
-            case 'Unanswered':
-                $(this).html('All');
-                break;
-            default:
-                $(this).html('Answered');
-                break;
+                case 'Answered':
+                    $(this).html('Unanswered');
+                    break;
+                case 'Unanswered':
+                    $(this).html('All');
+                    break;
+                default:
+                    $(this).html('Answered');
+                    break;
             }
         }
         if ($(this).is('#tag-health .closed-button')) {
             switch ($(this).html()) {
-            case 'Closed':
-                $(this).html('Not closed');
-                break;
-            case 'Not closed':
-                $(this).html('All');
-                break;
-            default:
-                $(this).html('Closed');
-                break;
+                case 'Closed':
+                    $(this).html('Not closed');
+                    break;
+                case 'Not closed':
+                    $(this).html('All');
+                    break;
+                default:
+                    $(this).html('Closed');
+                    break;
             }
         }
     }
@@ -947,7 +948,7 @@ with_jquery(function ($) {
         });
     }
 
-    if ($('body').hasClass('tagged-questions-page')) {
+    if ($('body').hasClass('tagged-questions-page') && !$('#tag-health').length) {
         createStyle();
         createModule();
         initModule();
