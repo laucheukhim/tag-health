@@ -52,17 +52,17 @@ with_jquery(function ($) {
                 var camel = prop.replace(/\-([a-z])/g, camelize);
                 var val = style.getPropertyValue(prop);
                 returns[camel] = val;
-            };
+            }
             return returns;
-        };
+        }
         if (style = dom.currentStyle) {
             for (var prop in style) {
                 returns[prop] = style[prop];
-            };
+            }
             return returns;
-        };
+        }
         return this.css();
-    }
+    };
 
     function getTags() {
         var path = location.pathname;
@@ -279,6 +279,7 @@ with_jquery(function ($) {
         if (location.host === 'christianity.stackexchange.com') {
             return 'rgb(255, 255, 255)';
         }
+        var color;
         if (color = getElementBackgroundColor($('#sidebar'))) return color;
         if (color = getElementBackgroundColor($('#mainbar'))) return color;
         if (color = getElementBackgroundColor($('#content'))) return color;
@@ -855,7 +856,7 @@ with_jquery(function ($) {
                     right = left + element.outerWidth(),
                     bottom = top + element.outerHeight();
                 return (event.pageX > left && event.pageX < right && event.pageY > top && event.pageY < bottom);
-            };
+            }
             var hoverPoint = $();
             $('.tag-health-dot a').each(function () {
                 if (!hoverPoint.length && isHover($(this))) {
