@@ -20,6 +20,8 @@
 // @include          http://*stackexchange.com/*
 // @include          https://*stackexchange.com/*
 // @author           Antony Lau
+// @downloadURL      http://laucheukhim.github.io/tag-health/tag-health.user.js
+// @updateURL        http://laucheukhim.github.io/tag-health/tag-health.user.js
 // ==/UserScript==
 
 function with_jquery(f) {
@@ -35,7 +37,6 @@ with_jquery(function ($) {
     var maxItems = 500;
     var maxPage = 5;
     var cacheDuration = 3600;
-    var scriptURL = '//laucheukhim.github.io/tag-health/tag-health.user.js';
 
     $.fn.getStyleObject = function () {
         var dom = this.get(0);
@@ -948,7 +949,7 @@ with_jquery(function ($) {
         });
     }
 
-    if ($('body').hasClass('tagged-questions-page') && !$('#tag-health').length) {
+    if ($('body').hasClass('tagged-questions-page')) {
         createStyle();
         createModule();
         initModule();
