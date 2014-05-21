@@ -20,8 +20,8 @@
 // @include          http://*stackexchange.com/*
 // @include          https://*stackexchange.com/*
 // @author           Antony Lau
-// @downloadURL      http://laucheukhim.github.io/tag-health/tag-health.user.js
-// @updateURL        http://laucheukhim.github.io/tag-health/tag-health.user.js
+// @downloadURL      https://laucheukhim.github.io/tag-health/tag-health.user.js
+// @updateURL        https://laucheukhim.github.io/tag-health/tag-health.user.js
 // ==/UserScript==
 
 function with_jquery(f) {
