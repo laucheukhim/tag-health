@@ -77,7 +77,7 @@ with_jquery(function ($) {
         page = page || 1;
         var api_url = 'http://api.stackexchange.com/2.2/questions/';
         var api_param = '?pagesize=100&page=' + page + '&order=desc&sort=creation&site=' + location.host + '&tagged=' + getTags().join(';');
-        var api_filter = '!OfYUOxuTWxgnJNCy5BxwLgdyEMeG9MWGlniuNo)vQql';
+        var api_filter = '!OfYUOxuTWxgnJNCy5BxBp6hE.9.F1YXZN33GRCl04bC';
         var api_key = 'd7zYCJ)APyrcXJPtDJsJGQ((';
         return $.ajax({
             type: 'GET',
@@ -123,9 +123,6 @@ with_jquery(function ($) {
                                     }
                                 }
                             }
-                        }
-                        if (typeof items[i].locked_date === 'number') {
-                            return ' [locked]';
                         }
                         if (typeof items[i].migrated_to !== 'undefined' && typeof items[i].migrated_to.on_date === 'number') {
                             return ' [migrated]';
@@ -602,7 +599,7 @@ with_jquery(function ($) {
                 z-index: 2;\
                 pointer-events: none;\
             }\
-            #tag-health.expanded #tag-health-plot . tooltip {\
+            #tag-health.expanded #tag-health-plot .tooltip {\
                 font-size: 100%;\
             }\
             #tag-health #tag-health-plot .tooltip .title {\
