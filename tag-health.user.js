@@ -589,7 +589,6 @@ with_jquery(function ($) {
         init: {
             all: function() {
                 if (TagHealth.version.checkLocal()) {
-                    console.log('init');
                     this.createStyle();
                     this.createModule();
                     this.initModule();
