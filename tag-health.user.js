@@ -77,7 +77,7 @@ with_jquery(function ($) {
         page = page || 1;
         var api_url = 'http://api.stackexchange.com/2.2/questions/';
         var api_param = '?pagesize=100&page=' + page + '&order=desc&sort=creation&site=' + location.host + '&tagged=' + getTags().join(';');
-        var api_filter = '!OfYUOxuTWxgnJNCy5CpAl9UULOQUTa(U52_)5yQ0I*G';
+        var api_filter = '!OfYUOxuTWxgnJNCy5BxwLgdyEMeG9MWGlniuNo)vQql';
         var api_key = 'd7zYCJ)APyrcXJPtDJsJGQ((';
         return $.ajax({
             type: 'GET',
@@ -123,6 +123,12 @@ with_jquery(function ($) {
                                     }
                                 }
                             }
+                        }
+                        if (typeof items[i].locked_date === 'number') {
+                            return ' [locked]';
+                        }
+                        if (typeof items[i].migrated_to !== 'undefined' && typeof items[i].migrated_to.on_date === 'number') {
+                            return ' [migrated]';
                         }
                         return '';
                     })(),
