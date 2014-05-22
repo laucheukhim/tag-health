@@ -151,7 +151,7 @@ with_jquery(function ($) {
             },
             getQuestions: function (page) {
                 page = page || 1;
-                var api_url = 'http://api.stackexchange.com/2.2/questions/';
+                var api_url = 'https://api.stackexchange.com/2.2/questions/';
                 var api_param = '?pagesize=100&page=' + page + '&order=desc&sort=creation&site=' + location.host + '&tagged=' + TagHealth.data.getTags().join(';');
                 var api_filter = '!OfYUOxuTWxgnJNCy5BxBp6hE.9.F1YXZN33GRCl04bC';
                 var api_key = 'd7zYCJ)APyrcXJPtDJsJGQ((';
@@ -222,19 +222,39 @@ with_jquery(function ($) {
                             title: items[i].title + (function () {
                                 if (typeof items[i].closed_reason !== 'undefined') {
                                     if (items[i].closed_reason === 'duplicate') {
-                                        return ' [duplicate]';
+                                        switch (location.host) {
+                                            case 'pt.stackoverflow.com':
+                                                return ' [duplicado]';
+                                            default:
+                                                return ' [duplicate]';
+                                        }
                                     } else {
                                         if (typeof items[i].closed_date === 'number') {
                                             if (items[i].closed_date > Date.now() / 1000 - 7 * 24 * 60 * 60) {
-                                                return ' [on hold]';
+                                                switch (location.host) {
+                                                    case 'pt.stackoverflow.com':
+                                                        return ' [em suspenso]';
+                                                    default :
+                                                        return ' [on hold]';
+                                                }
                                             } else {
-                                                return ' [closed]';
+                                                switch (location.host) {
+                                                    case 'pt.stackoverflow.com':
+                                                        return ' [fechado]';
+                                                    default:
+                                                        return ' [closed]';
+                                                }
                                             }
                                         }
                                     }
                                 }
                                 if (typeof items[i].migrated_to !== 'undefined' && typeof items[i].migrated_to.on_date === 'number') {
-                                    return ' [migrated]';
+                                    switch (location.host) {
+                                        case 'pt.stackoverflow.com':
+                                            return ' [migrado]';
+                                        default:
+                                            return ' [migrated]';
+                                    }
                                 }
                                 return '';
                             })(),
@@ -982,7 +1002,9 @@ with_jquery(function ($) {
             initModule: function () {
                 TagHealth.process.getAllQuestions(function (items) {
                     $('#tag-health').data('items', items);
-                    $('#tag-health h4 img').remove();
+                    if (items.length) {
+                        $('#tag-health h4 img').remove();
+                    }
                     var settings = TagHealth.storage.fetchSettings();
                     TagHealth.process.generatePlot(settings);
                 });
