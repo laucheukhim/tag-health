@@ -2,7 +2,7 @@
 // @name             Tag Health
 // @namespace        TagHealth
 // @version          1.0.0
-// @description      Tag Health monitors the question quality of a given set of tags on a Stack Exchange site with a sample of up to 500 most recent questions.
+// @description      Tag Health monitors the question quality of a given set of tags on a Stack Exchange site with a sample of about 500 most recent questions.
 // @include          http://*stackoverflow.com/*
 // @include          https://*stackoverflow.com/*
 // @include          http://*superuser.com/*
@@ -589,6 +589,7 @@ with_jquery(function ($) {
         init: {
             all: function() {
                 if (TagHealth.version.checkLocal()) {
+                    console.log('init');
                     this.createStyle();
                     this.createModule();
                     this.initModule();
