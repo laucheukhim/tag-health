@@ -971,7 +971,7 @@ with_jquery(function ($) {
                                     </div>\
                                 </div>\
                                 <div class="size-button">expand</div>\
-                                <div class="update-button"><a href="' + TagHealth.defaults.scriptURL + '">update available</a></div>\
+                                <div class="update-button"><a href="' + TagHealth.defaults.scriptURL + '">update</a></div>\
                             </div>\
                         </div>\
                     </div>\
