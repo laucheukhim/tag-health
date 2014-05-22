@@ -911,13 +911,11 @@ with_jquery(function ($) {
                         display: none;\
                         position: absolute;\
                         top: 0;\
-                        left: 60%;\
+                        right: 0;\
                         cursor: pointer;\
                     }\
-                    #tag-health.expanded .update-button {\
-                        left: 30%;\
-                    }\
                     #tag-health .update-button a {\
+                        color: #999;\
                         text-decoration: none;\
                     }\
                     </style>\
