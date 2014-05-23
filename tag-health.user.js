@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name             Tag Health
 // @namespace        TagHealth
-// @version          1.0.1
+// @version          1.0.2
 // @description      Tag Health monitors the question quality of a given set of tags on a Stack Exchange site with a sample of about 500 most recent questions.
 // @include          http://*stackoverflow.com/*
 // @include          https://*stackoverflow.com/*
@@ -42,12 +42,12 @@ with_jquery(function ($) {
             scriptURL: 'https://laucheukhim.github.io/tag-health/tag-health.user.js'
         },
         version: {
-            number: '1.0.1',
+            number: '1.0.2',
             compare: function (number, options) {
                 var lexicographical = options && options.lexicographical,
                     zeroExtend = options && options.zeroExtend,
-                    v1parts = this.number.split('.'),
-                    v2parts = number.split('.');
+                    v1parts = number.split('.'),
+                    v2parts = this.number.split('.');
                 function isValidPart(x) {
                     return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
                 }
@@ -68,11 +68,9 @@ with_jquery(function ($) {
                     }
                     if (v1parts[i] == v2parts[i]) {
                         continue;
-                    }
-                    else if (v1parts[i] > v2parts[i]) {
+                    } else if (v1parts[i] > v2parts[i]) {
                         return 1;
-                    }
-                    else {
+                    } else {
                         return -1;
                     }
                 }
@@ -268,7 +266,8 @@ with_jquery(function ($) {
                 }
                 return dataPoints;
             },
-            generatePlot: function (settings) {
+            generatePlot: function () {
+                var settings = TagHealth.settings.getCurrentSettings();
                 settings = $.extend({
                     logReputation: false,
                     spread: false,
@@ -612,6 +611,8 @@ with_jquery(function ($) {
                             break;
                     }
                 }
+                var settings = TagHealth.settings.getCurrentSettings();
+                TagHealth.storage.saveSettings(settings);
             }
         },
         init: {
@@ -719,20 +720,6 @@ with_jquery(function ($) {
                     }\
                     #tag-health .tag-health-dot .cross.spread:after {\
                         height: 0;\
-                    }\
-                    #tag-health .tag-health-dot .line.one {\
-                        -webkit-transform: rotate(45deg) translate(3.2px, 2.4px);\
-                        -moz-transform: rotate(45deg) translate(1.8px, 2.4px);\
-                        -o-transform: rotate(45deg) translate(2px, 2px);\
-                        -ms-transform: rotate(45deg) translate(2px, 2px);\
-                        transform: rotate(45deg) translate(1.8px, 2.4px);\
-                    }\
-                    #tag-health .tag-health-dot .line.two {\
-                        -webkit-transform: rotate(135deg) translate(2.4px, -3.2px);\
-                        -moz-transform: rotate(135deg) translate(2.4px, -1.8px);\
-                        -o-transform: rotate(135deg) translate(2px, -2px);\
-                        -ms-transform: rotate(135deg) translate(2px, -2px);\
-                        transform: rotate(135deg) translate(2.4px, -1.8px);\
                     }\
                     #tag-health #tag-health-plot .row {\
                         display: table-row;\
@@ -1013,17 +1000,14 @@ with_jquery(function ($) {
                     if (items.length) {
                         $('#tag-health h4 img').remove();
                     }
-                    var settings = TagHealth.storage.fetchSettings();
-                    TagHealth.process.generatePlot(settings);
+                    TagHealth.process.generatePlot();
                 });
                 $('#tag-health .filter-button span').on('click', function () {
                     $('#tag-health .filter-popup').toggle();
                 });
                 $('#tag-health .reputation-button, #tag-health .style-button, #tag-health .time-button, #tag-health .answered-button, #tag-health .closed-button').on('click', function () {
                     TagHealth.settings.changeCurrentSettings.apply(this);
-                    var settings = TagHealth.settings.getCurrentSettings();
-                    TagHealth.storage.saveSettings(settings);
-                    TagHealth.process.generatePlot(settings);
+                    TagHealth.process.generatePlot();
                 });
                 // Rearranging the points when hovered to make them easier click targets since they often overlap
                 $(window).on('mousemove', function (event) {
@@ -1126,8 +1110,7 @@ with_jquery(function ($) {
                             height: $('#tag-health').outerHeight()
                         });
                     }
-                    var settings = TagHealth.settings.getCurrentSettings();
-                    TagHealth.process.generatePlot(settings);
+                    TagHealth.process.generatePlot();
                 });
             }
         }
