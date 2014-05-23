@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name             Tag Health
 // @namespace        TagHealth
-// @version          1.0.2
+// @version          1.0.3
 // @description      Tag Health monitors the question quality of a given set of tags on a Stack Exchange site with a sample of about 500 most recent questions.
 // @include          http://*stackoverflow.com/*
 // @include          https://*stackoverflow.com/*
@@ -42,7 +42,7 @@ with_jquery(function ($) {
             scriptURL: 'https://laucheukhim.github.io/tag-health/tag-health.user.js'
         },
         version: {
-            number: '1.0.2',
+            number: '1.0.3',
             compare: function (number, options) {
                 var lexicographical = options && options.lexicographical,
                     zeroExtend = options && options.zeroExtend,
@@ -632,7 +632,10 @@ with_jquery(function ($) {
                         overflow: hidden;\
                     }\
                     #tag-health {\
-                        \
+                        width: 195px;\
+                    }\
+                    #tag-health.expanded {\
+                        width: 500px;\
                     }\
                     #tag-health.expanded {\
                         position: absolute;\
@@ -647,11 +650,10 @@ with_jquery(function ($) {
                         display: table;\
                         border-collapse: collapse;\
                         position: relative;\
-                        width: 98%;\
+                        width: 100%;\
                         height: 150px;\
                     }\
                     #tag-health.expanded #tag-health-plot {\
-                        width: 500px;\
                         height: 200px;\
                     }\
                     #tag-health .tag-health-dot {\
@@ -1064,8 +1066,10 @@ with_jquery(function ($) {
                         }
                         if (reputation < 10000) {
                             position += reputation + ' rep';
-                        } else if (reputation < 1000000) {
+                        } else if (reputation < 100000) {
                             position += (reputation / 1000).toFixed(1).replace('.0', '') + 'k rep';
+                        } else if (reputation < 1000000) {
+                            position += (reputation / 1000).toFixed() + 'k rep';
                         } else {
                             position += (reputation / 1000000).toFixed(1).replace('.0', '') + 'm rep';
                         }
