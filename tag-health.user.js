@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name             Tag Health
 // @namespace        TagHealth
-// @version          1.0.0
+// @version          1.0.1
 // @description      Tag Health monitors the question quality of a given set of tags on a Stack Exchange site with a sample of about 500 most recent questions.
 // @include          http://*stackoverflow.com/*
 // @include          https://*stackoverflow.com/*
@@ -42,7 +42,7 @@ with_jquery(function ($) {
             scriptURL: 'https://laucheukhim.github.io/tag-health/tag-health.user.js'
         },
         version: {
-            number: '1.0.0',
+            number: '1.0.1',
             compare: function (number, options) {
                 var lexicographical = options && options.lexicographical,
                     zeroExtend = options && options.zeroExtend,
@@ -427,18 +427,21 @@ with_jquery(function ($) {
             },
             setStorage: function (key, value) {
                 if (this.localStorageAvailable()) {
-                    var storageString = '';
-                    var storage = {};
                     try {
-                        storageString = localStorage.getItem('tag-health');
-                        storage = JSON.parse(storageString);
-                        if (storage === null || typeof storage !== 'object') {
-                            storage = {};
-                        }
+                        var storageString = localStorage.getItem('tag-health') || '';
+                        var storage = JSON.parse(storageString);
                     } catch (e) {}
+                    if (storage === null || typeof storage !== 'object') {
+                        storage = {};
+                    }
                     storage[key] = value;
                     storageString = JSON.stringify(storage);
-                    localStorage.setItem('tag-health', storageString);
+                    try {
+                        localStorage.setItem('tag-health', storageString);
+                        return true;
+                    } catch (e) {
+                        return false;
+                    }
                 }
             },
             fetchItems: function () {
@@ -482,7 +485,12 @@ with_jquery(function ($) {
                         allItems = {};
                     }
                     allItems[tags] = items;
-                    this.setStorage('items', allItems);
+                    if (!this.setStorage('items', allItems)) {
+                        // Memory limit reached, clear all other items and try again
+                        allItems = {};
+                        allItems[tags] = items;
+                        this.setStorage('items', allItems);
+                    }
                 }
             },
             fetchSettings: function () {
