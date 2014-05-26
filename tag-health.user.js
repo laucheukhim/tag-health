@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name             Tag Health
 // @namespace        TagHealth
-// @version          1.0.3
+// @version          1.0.4
 // @description      Tag Health monitors the question quality of a given set of tags on a Stack Exchange site with a sample of about 500 most recent questions.
 // @include          http://*stackoverflow.com/*
 // @include          https://*stackoverflow.com/*
@@ -42,7 +42,7 @@ with_jquery(function ($) {
             scriptURL: 'https://laucheukhim.github.io/tag-health/tag-health.user.js'
         },
         version: {
-            number: '1.0.3',
+            number: '1.0.4',
             compare: function (number, options) {
                 var lexicographical = options && options.lexicographical,
                     zeroExtend = options && options.zeroExtend,
@@ -143,7 +143,18 @@ with_jquery(function ($) {
                 var path = location.pathname;
                 var match = path.match(/\/tagged\/(.*)/i);
                 if (match && match[1]) {
-                    return match[1].toLowerCase().split('+').sort();
+                    var tags = match[1].toLowerCase().split('+');
+                    var hasOr = false;
+                    for (var i = 0; i < tags.length; i++) {
+                        if (tags[i] === "or") {
+                            hasOr = true;
+                            break;
+                        }
+                    }
+                    if (!hasOr) {
+                        tags.sort();
+                    }
+                    return tags;
                 }
                 return [];
             },
@@ -207,7 +218,9 @@ with_jquery(function ($) {
                         }
                     });
                 }
-                callback(items);
+                if (items.length) {
+                    callback(items);
+                }
                 process(1);
             },
             extractDataPoints: function (items) {
@@ -999,9 +1012,7 @@ with_jquery(function ($) {
             initModule: function () {
                 TagHealth.process.getAllQuestions(function (items) {
                     $('#tag-health').data('items', items);
-                    if (items.length) {
-                        $('#tag-health h4 img').remove();
-                    }
+                    $('#tag-health h4 img').remove();
                     TagHealth.process.generatePlot();
                 });
                 $('#tag-health .filter-button span').on('click', function () {
