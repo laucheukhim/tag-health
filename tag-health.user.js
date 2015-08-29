@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name             Tag Health
 // @namespace        TagHealth
-// @version          1.0.4
+// @version          1.0.5
 // @description      Tag Health monitors the question quality of a given set of tags on a Stack Exchange site with a sample of about 500 most recent questions.
 // @include          http://*stackoverflow.com/*
 // @include          https://*stackoverflow.com/*
@@ -42,12 +42,14 @@ with_jquery(function ($) {
             scriptURL: 'https://laucheukhim.github.io/tag-health/tag-health.user.js'
         },
         version: {
-            number: '1.0.4',
+            number: '1.0.5',
+            isLocal: false,
             compare: function (number, options) {
                 var lexicographical = options && options.lexicographical,
                     zeroExtend = options && options.zeroExtend,
                     v1parts = number.split('.'),
                     v2parts = this.number.split('.');
+
                 function isValidPart(x) {
                     return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
                 }
@@ -79,11 +81,12 @@ with_jquery(function ($) {
                 }
                 return 0;
             },
-            checkRemote: function() {
+            checkRemote: function () {
                 $.getScript(TagHealth.defaults.scriptURL);
             },
-            checkLocal: function() {
+            checkLocal: function () {
                 if (typeof window.TagHealth === 'undefined') {
+                    TagHealth.version.isLocal = true;
                     window.TagHealth = TagHealth;
                     return true;
                 } else {
@@ -93,7 +96,7 @@ with_jquery(function ($) {
                     return false;
                 }
             },
-            remind: function() {
+            remind: function () {
                 $('#tag-health .update-button').show();
             }
         },
@@ -155,13 +158,19 @@ with_jquery(function ($) {
                         tags.sort();
                     }
                     return tags;
+                } else if ($('.filtered-tags').length) {
+                    var tags = [];
+                    $('.filtered-tags .post-tag').each(function () {
+                        tags.push($(this).html());
+                    });
+                    return tags;
                 }
                 return [];
             },
             getQuestions: function (page) {
                 page = page || 1;
                 var api_url = 'https://api.stackexchange.com/2.2/questions/';
-                var api_param = '?pagesize=100&page=' + page + '&order=desc&sort=creation&site=' + location.host + '&tagged=' + TagHealth.data.getTags().join(';');
+                var api_param = '?pagesize=100&page=' + page + '&order=desc&sort=creation&site=' + location.host + '&tagged=' + encodeURIComponent(TagHealth.data.getTags().join(';'));
                 var api_filter = '!OfYUOxuTWxgnJNCy5BxBp6hE.9.F1YXZN33GRCl04bC';
                 var api_key = 'd7zYCJ)APyrcXJPtDJsJGQ((';
                 return $.ajax({
@@ -245,7 +254,7 @@ with_jquery(function ($) {
                                                 switch (location.host) {
                                                     case 'pt.stackoverflow.com':
                                                         return ' [em suspenso]';
-                                                    default :
+                                                    default:
                                                         return ' [on hold]';
                                                 }
                                             } else {
@@ -629,12 +638,17 @@ with_jquery(function ($) {
             }
         },
         init: {
-            all: function() {
-                if (TagHealth.version.checkLocal()) {
-                    this.createStyle();
+            all: function () {
+                if (!TagHealth.version.isLocal) {
+                    if (TagHealth.version.checkLocal()) {
+                        this.createStyle();
+                        this.createModule();
+                        this.initModule();
+                        TagHealth.version.checkRemote();
+                    }
+                } else {
                     this.createModule();
                     this.initModule();
-                    TagHealth.version.checkRemote();
                 }
             },
             createStyle: function () {
@@ -674,23 +688,23 @@ with_jquery(function ($) {
                         width: 7px;\
                         height: 7px;\
                         margin-top: ' + (function () {
-                            if (TagHealth.browser.isChrome) {
-                                return '-2.5';
-                            } else if (TagHealth.browser.isSafari) {
-                                return '-3';
-                            } else {
-                                return '-4';
-                            }
-                        })() + 'px;\
+                        if (TagHealth.browser.isChrome) {
+                            return '-2.5';
+                        } else if (TagHealth.browser.isSafari) {
+                            return '-3';
+                        } else {
+                            return '-4';
+                        }
+                    })() + 'px;\
                         margin-left: ' + (function () {
-                            if (TagHealth.browser.isChrome) {
-                                return '-2.5';
-                            } else if (TagHealth.browser.isSafari) {
-                                return '-3';
-                            } else {
-                                return '-4';
-                            }
-                        })() + 'px;\
+                        if (TagHealth.browser.isChrome) {
+                            return '-2.5';
+                        } else if (TagHealth.browser.isSafari) {
+                            return '-3';
+                        } else {
+                            return '-4';
+                        }
+                    })() + 'px;\
                     }\
                     #tag-health .tag-health-dot a {\
                         display: block;\
@@ -1131,7 +1145,13 @@ with_jquery(function ($) {
         }
     };
 
-    if ($('body').hasClass('tagged-questions-page')) {
+    if ($('.filtered-tags').length) {
+        $(document).ajaxSuccess(function (event, jqXHR, ajaxOptions, data) {
+            if (ajaxOptions.dataType === 'html' && $(data).find('#qlist-wrapper').length) {
+                TagHealth.init.all();
+            }
+        });
+    } else if ($('body').hasClass('tagged-questions-page')) {
         TagHealth.init.all();
     }
 });
