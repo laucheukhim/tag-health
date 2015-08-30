@@ -161,7 +161,7 @@ with_jquery(function ($) {
                 } else if ($('.filtered-tags').length) {
                     var tags = [];
                     $('.filtered-tags .post-tag').each(function () {
-                        tags.push($(this).html());
+                        tags.push($(this).text());
                     });
                     return tags;
                 }
